@@ -1,0 +1,7 @@
+{
+    "chunk_id": 2,
+    "content": "Fix the command: or args: field in the Pod manifest. \n\nE. Failed Liveness Probes\n\nProblem: The app is running fine, but the Liveness Probe is failing (e.g., checking the wrong port), causing Kubernetes to kill and restart it.\n\nFix:\n\nCheck Events in kubectl describe pod for \"Liveness probe failed.\"\n\nAdjust initialDelaySeconds to give the app more time to start.\n\nFix the health check path or port.\n\nF. Permission or Port Issues\n\nProblem: The container is trying to bind to a restricted port (like 80) or write to a read-only directory.\n\nFix:\n\nRun the container as a non-root user but use ports above 1024.\n\nAdjust securityContext or volume permissions (readOnly: false).\n\nSummary Checklist\n\nCommand\n\nPurpose\n\nkubectl logs <pod> --previous\n\nRead the error message from the crash. \n\nkubectl describe pod <pod>\n\nLook for Exit Code and Liveness Probe failures.\n\nkubectl get events --sort-by=.lastTimestamp\n\nSee the timeline of restarts. \n\nkubectl get configmap,secret\n\nEnsure dependencies are present.",
+    "metadata": {
+        "source": "PodsInCrashloopbackoff.docx"
+    }
+}

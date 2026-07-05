@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Remediation_Search"
+version = "0.1.0"
+description = "Local document chunking and remediation lookup from processed chunks."
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv",
+    "langchain",
+    "langchain-core",
+    "langchain-text-splitters",
+    "langchain-openai",
+    "langchain-community",
+    "docx2txt",
+    "pypdf",
+    "azure-search-documents",
+    "fastapi",
+    "uvicorn[standard]",
+]
+
+[project.scripts]
+avi = "remediation_search.__main__:main"
+avi-api = "remediation_search.api.app:run"
+
+[tool.setuptools]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["remediation_search*"]
+

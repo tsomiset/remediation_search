@@ -1,0 +1,7 @@
+{
+    "chunk_id": 1,
+    "content": "Problem: Code bugs, missing config files, or unhandled exceptions.\n\nFix:\n\nReview kubectl logs <pod-name> --previous. \n\nFix the code or configuration and push a new image.\n\nEnsure all required config files (ConfigMaps) are mounted correctly.\n\nB. Out of Memory (OOMKilled)\n\nProblem: The container tried to use more memory than its limits allow.\n\nFix:\n\nIncrease the memory limit in the Pod spec.\n\nOptimize the application to use less memory.\n\nCheck for memory leaks. \n\nC. Missing Environment Variables or Secrets\n\nProblem: The app expects a database URL or API key that isn't provided.\n\nFix:\n\nCheck kubectl describe pod to see if all env variables are populated. \n\nEnsure referenced Secrets or ConfigMaps actually exist in the same namespace.\n\nD. Incorrect Command or Arguments\n\nProblem: The command or args in the YAML is wrong (e.g., a typo in python3 app.py).\n\nFix:\n\nVerify the entrypoint in your Dockerfile.\n\nFix the command: or args: field in the Pod manifest. \n\nE. Failed Liveness Probes",
+    "metadata": {
+        "source": "PodsInCrashloopbackoff.docx"
+    }
+}

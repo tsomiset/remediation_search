@@ -1,0 +1,7 @@
+{
+    "chunk_id": 0,
+    "content": "When a Kubernetes Pod is in the CrashLoopBackOff state, it means the container is starting, crashing, and being restarted by the kubelet in a repeating loop.\n\n1. Identify the Cause\n\nUnlike the Pending state, the issue is usually inside the container or its configuration.Use these commands to find the root cause:\n\nCheck the Logs (Most Important): See why the application actually crashed.\n\ncodeBash\n\nkubectl logs <pod-name> --previous\n\nNote: The --previous flag is critical because it shows the logs of the container that just crashed. \n\nCheck the Exit Code:\n\ncodeBash\n\nkubectl describe pod <pod-name>\n\nLook for the Last State section. Common exit codes:\n\n137 (OOMKilled): The container exceeded its memory limit.\n\n1 (Application Error): Generic application crash (check logs).\n\n127 (Command Not Found): The entrypoint command or script is missing in the image.\n\n\n\n2. Common Remediation Steps\n\nA. Application Crashing on Startup\n\nProblem: Code bugs, missing config files, or unhandled exceptions.",
+    "metadata": {
+        "source": "PodsInCrashloopbackoff.docx"
+    }
+}
