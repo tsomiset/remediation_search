@@ -119,6 +119,24 @@ python -m remediation_search "Pod Pending State"
 `outputs/processed_chunks/` is the bridge between the two paths.
 Document ingestion writes to it; remediation lookup reads from it.
 
+## API Ingestion Flow
+
+The backend API adds a dedicated upload route for knowledge files.
+
+```
+POST /api/ingest
+```
+
+### Steps
+
+1. Client sends `multipart/form-data` with:
+    - `file`: the knowledge document to ingest
+    - `api_key`: the API token value
+2. `api/app.py` stores the uploaded file temporarily.
+3. `document_processor.py` parses and chunks the file.
+4. Chunks are saved into `outputs/processed_chunks/`.
+5. Remediation search endpoints can immediately use the updated knowledge base.
+
 ```
 Ingest first:   document → outputs/processed_chunks/*.json
 Query anytime:  root cause → search outputs/processed_chunks/*.json → remediation steps

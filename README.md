@@ -78,6 +78,7 @@ uvicorn remediation_search.api.app:app --host 0.0.0.0 --port 8000 --reload
 
 - GET /health
 - POST /api/remediation
+- POST /api/ingest
 
 ### Request Example
 
@@ -111,10 +112,11 @@ uvicorn remediation_search.api.app:app --host 0.0.0.0 --port 8000 --reload
 
 ### Auth Stub (No JWT)
 
-This API uses a simple API-key stub via X-API-Key header:
+This API keeps the original API-key stub for the existing remediation endpoints:
 
-- If AVI_API_KEY is not set: auth is bypassed (dev mode).
-- If AVI_API_KEY is set: X-API-Key is required.
+- `GET /api/remediation/search` and `POST /api/remediation` use the `X-API-Key` header.
+- If `AVI_API_KEY` is not set, auth is bypassed in dev mode.
+- If `AVI_API_KEY` is set, `X-API-Key` must match.
 
 Set key example:
 
@@ -126,6 +128,17 @@ PowerShell:
 
 ```powershell
 $env:AVI_API_KEY = "your-internal-key"
+```
+
+Example payload for the new ingest route:
+
+```json
+{
+    "api_key": "your-internal-key",
+    "alert_name": "Pod Pending Alert",
+    "root_cause": "pod in pending",
+    "limit": 3
+}
 ```
 
 ### Test With curl
@@ -143,6 +156,33 @@ curl -X POST "http://localhost:8000/api/remediation" \
 $headers = @{ "Content-Type" = "application/json"; "X-API-Key" = "your-internal-key" }
 $body = @{ alert_name = "Pod Pending Alert"; root_cause = "pod in pending"; limit = 3 } | ConvertTo-Json
 Invoke-RestMethod -Uri "http://localhost:8000/api/remediation" -Method Post -Headers $headers -Body $body
+```
+
+### Ingest a New Knowledge File
+
+Use `POST /api/ingest` with `multipart/form-data`.
+
+Postman fields:
+
+- `file`: choose the document to ingest
+- `api_key`: your token value
+
+Example curl:
+
+```bash
+curl -X POST "http://localhost:8000/api/ingest" \
+    -F "api_key=your-internal-key" \
+    -F "file=@C:/path/to/your-file.docx"
+```
+
+Example PowerShell:
+
+```powershell
+$form = @{
+    api_key = "your-internal-key"
+    file = Get-Item "C:\path\to\your-file.docx"
+}
+Invoke-RestMethod -Uri "http://localhost:8000/api/ingest" -Method Post -Form $form
 ```
 
 ### Run Tests

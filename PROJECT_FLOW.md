@@ -29,6 +29,19 @@ The project starts by accepting a single input and routing it into one of two pa
 1. A supported document path such as `.pdf`, `.docx`, `.txt`, `.md`, `.csv`, `.json`, `.py`, `.html`, or `.xml`.
 2. A plain text root-cause query such as an alert name or incident description.
 
+## API Ingestion Route
+
+The backend API exposes a dedicated upload path for adding knowledge files without using the CLI.
+
+1. `POST /api/ingest`
+2. Accepts `multipart/form-data`
+3. Requires:
+    - `file`: uploaded document
+    - `api_key`: token value
+4. Saves processed chunks into `outputs/processed_chunks/`
+
+This route updates the same shared knowledge base used by the remediation search endpoints.
+
 ## Document Ingestion Flow
 
 When the input is a file path, the project:
@@ -55,7 +68,6 @@ This path is what turns an alert or problem description into suggested remediati
 
 | Module | Responsibility |
 |---|---|
-| `startup.py` | Entry point for launching the project |
 | `remediation_search/__main__.py` | Routes input to ingestion or lookup |
 | `remediation_search/document_processor.py` | Reads and chunks documents |
 | `remediation_search/remediation_finder.py` | Loads chunks and finds relevant matches |

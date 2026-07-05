@@ -18,6 +18,7 @@ dependencies = [
     "pypdf",
     "azure-search-documents",
     "fastapi",
+    "python-multipart",
     "uvicorn[standard]",
 ]
 

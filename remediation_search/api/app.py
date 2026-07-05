@@ -1,15 +1,21 @@
 """FastAPI application exposing remediation backend endpoints."""
 
+import shutil
+import tempfile
+from pathlib import Path
+
 import uvicorn
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
 
 from remediation_search.api.dependencies import require_api_key
 from remediation_search.api.schemas import (
+    IngestionResponse,
     HealthResponse,
     RemediationRequest,
     RemediationResponse,
     RemediationStep,
 )
+from remediation_search.services.document_processor import process_document
 from remediation_search.services.remediation_service import RemediationService
 
 app = FastAPI(
@@ -153,4 +159,57 @@ def get_remediation(
         steps=steps,
         message=message,
     )
+
+
+@app.post("/api/ingest", response_model=IngestionResponse)
+def ingest_document(
+    file: UploadFile = File(...),
+    api_key: str | None = Form(default=None),
+) -> IngestionResponse:
+    """
+    Ingest a knowledge file through Postman and rebuild the processed chunks.
+
+    Send the uploaded file as multipart form-data together with api_key.
+    """
+    if not api_key:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unauthorized: missing API key in request body.",
+        )
+
+    if not file.filename:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="Uploaded file must have a filename.",
+        )
+
+    source_name = Path(file.filename).name
+
+    try:
+        with tempfile.NamedTemporaryFile(delete=False, suffix=Path(source_name).suffix) as temp_file:
+            shutil.copyfileobj(file.file, temp_file)
+            temp_path = Path(temp_file.name)
+
+        process_document(temp_path)
+
+        chunks_dir = Path("outputs") / "processed_chunks"
+        chunk_count = len(list(chunks_dir.glob("chunk_*.json")))
+
+        return IngestionResponse(
+            status="success",
+            filename=source_name,
+            chunks_saved=chunk_count,
+            output_dir=str(chunks_dir),
+            message="Document ingested successfully.",
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
+    finally:
+        try:
+            temp_path.unlink(missing_ok=True)
+        except UnboundLocalError:
+            pass
 

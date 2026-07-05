@@ -46,6 +46,16 @@ class RemediationResponse(BaseModel):
     message: str
 
 
+class IngestionResponse(BaseModel):
+    """Response payload for document ingestion."""
+
+    status: str
+    filename: str
+    chunks_saved: int
+    output_dir: str
+    message: str
+
+
 class HealthResponse(BaseModel):
     """Service health response model."""
 
