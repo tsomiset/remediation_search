@@ -71,8 +71,10 @@ avi-api
 Option 2:
 
 ```bash
-uvicorn remediation_search.api.app:app --host 0.0.0.0 --port 8000 --reload
+python -m remediation_search.api
 ```
+
+The API startup settings now come from [`pyproject.toml`](pyproject.toml) under `tool.remediation_search.api`, so the default host, port, and reload mode are loaded automatically.
 
 ### API Endpoints
 

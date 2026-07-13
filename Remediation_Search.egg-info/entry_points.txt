@@ -1,0 +1,3 @@
+[console_scripts]
+avi = remediation_search.__main__:main
+avi-api = remediation_search.api.app:run

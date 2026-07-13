@@ -32,3 +32,8 @@ avi-api = "remediation_search.api.app:run"
 where = ["."]
 include = ["remediation_search*"]
 
+[tool.remediation_search.api]
+host = "0.0.0.0"
+port = 8000
+reload = true
+

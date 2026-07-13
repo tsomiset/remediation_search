@@ -1,0 +1,17 @@
+Metadata-Version: 2.4
+Name: Remediation_Search
+Version: 0.1.0
+Summary: Local document chunking and remediation lookup from processed chunks.
+Requires-Python: >=3.10
+Requires-Dist: python-dotenv
+Requires-Dist: langchain
+Requires-Dist: langchain-core
+Requires-Dist: langchain-text-splitters
+Requires-Dist: langchain-openai
+Requires-Dist: langchain-community
+Requires-Dist: docx2txt
+Requires-Dist: pypdf
+Requires-Dist: azure-search-documents
+Requires-Dist: fastapi
+Requires-Dist: python-multipart
+Requires-Dist: uvicorn[standard]

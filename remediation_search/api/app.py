@@ -15,6 +15,7 @@ from remediation_search.api.schemas import (
     RemediationResponse,
     RemediationStep,
 )
+from remediation_search.config import get_runtime_settings
 from remediation_search.services.document_processor import process_document
 from remediation_search.services.remediation_service import RemediationService
 
@@ -27,7 +28,14 @@ app = FastAPI(
 
 def run() -> None:
     """Run the API server via console script."""
-    uvicorn.run("remediation_search.api.app:app", host="0.0.0.0", port=8000, reload=False)
+    settings = get_runtime_settings()
+
+    uvicorn.run(
+        "remediation_search.api.app:app",
+        host=settings.host,
+        port=settings.port,
+        reload=settings.reload,
+    )
 
 
 @app.get("/api/remediation/search", response_model=RemediationResponse)
@@ -212,4 +220,8 @@ def ingest_document(
             temp_path.unlink(missing_ok=True)
         except UnboundLocalError:
             pass
+
+
+if __name__ == "__main__":
+    run()
 
