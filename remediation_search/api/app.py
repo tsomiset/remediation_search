@@ -25,6 +25,22 @@ app = FastAPI(
     version="0.1.0",
 )
 
+ALLOWED_ORIGINS = [
+    "https://cnc-dev.azurewebsites.net",
+    "https://cnc-test.azurewebsites.net",
+    "https://cnc-prd.azurewebsites.net",
+    "https://cnc.octaveoncall.com",
+    "http://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=ALLOWED_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 def run() -> None:
     """Run the API server via console script."""
