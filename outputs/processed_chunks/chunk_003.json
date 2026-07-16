@@ -1,7 +1,7 @@
 {
     "chunk_id": 3,
-    "content": "Copy\n\n# Check current overcommit settings\n\ncat /proc/sys/vm/overcommit_memory\n\ncat /proc/sys/vm/overcommit_ratio\n\n\n\n# vm.overcommit_memory values:\n\n# 0 = Heuristic overcommit (default)\n\n# 1 = Always overcommit (never refuse)\n\n# 2 = Don't overcommit (strict accounting)",
+    "content": "Save and close the editor.\n\nRollout the ingress pod\n\nkubectl rollout restart deploy ingress-azure -n default\n\nThis forces the Ingress Controller to refresh backend pool registration with updated service IPs.\n\nConfirm that the alert has stopped firing in CNC.",
     "metadata": {
-        "source": "C:\\Users\\tsomiset\\AppData\\Local\\Temp\\tmp8c2gjsny.docx"
+        "source": "C:\\Users\\tsomiset\\AppData\\Local\\Temp\\tmpv8jrb4it.docx"
     }
 }

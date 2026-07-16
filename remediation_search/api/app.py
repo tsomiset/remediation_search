@@ -6,6 +6,7 @@ from pathlib import Path
 
 import uvicorn
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
 
 from remediation_search.api.dependencies import require_api_key
 from remediation_search.api.schemas import (
@@ -240,4 +241,3 @@ def ingest_document(
 
 if __name__ == "__main__":
     run()
-
